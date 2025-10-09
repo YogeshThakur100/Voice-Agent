@@ -1,0 +1,11 @@
+{
+  "Total Experience": ,
+  "CTC": "",
+  "ECTC": "",
+  "Notice Period": "",
+  "City": "",
+  "Communication": "",
+  "Communication Rating": ,
+  "Experience Skillset": "",
+  "Applicant Summary": ""
+}                     
