@@ -1,4 +1,34 @@
+Agent: Hello! Am I speaking with Mahalingam Ramasamy?
+User: Hello.
+User: Yes, you are.
+Agent: Great! We received your application for the Generative AI Engineer position at Gunadhya Software Solution Private Limited. Is now a good time for a quick 2-3 minute screening?
+Agent: Perfect! Let's get started. Can you please tell me your total years of professional experience?
+User: Yes, please go ahead.
+Agent: Agent message not found
+User: That's two years off.
+User: working experience.
+Agent: You mentioned you have two years of working experience. Next, what is your current CTC (Cost to Company)?
+Agent: Could you please clarify your current CTC? I need the exact amount to record.
+User: It's so going to be
+Agent: Noted. Your current CTC is 7 lakh per year. What is your expected CTC for this opportunity?
+User: So I'm out of here
+User: 10 lakh per year.
+Agent: Your expected CTC is 10 lakh per year. What is your current notice period, and are you open to negotiating it if required?
+User: 15 days of notice period.
+Agent: You have a 10-day notice period. Are you open to negotiating it if the company requires a longer notice?
+Agent: Agent message not found
+User: Mm.
+Agent: Great! You're open to negotiating the notice period. Which city are you currently based in?
 User: Thank you.
-Agent: Hello, am I speaking with Yogesh Chauhan?
-User: Yes
-Agent: We received your application for the Node.js Developer position at Gunadhyan Software Pvt Ltd. Is now a good time for a quick 2-3 minute screening?
+User: Bye.
+Agent: Could you please tell me which city you're currently based in?
+User: Mumbai
+Agent: You're based in Mumbai. Could you share your key skills and relevant experience for this role?
+User: High Tension Air, Open Air.
+Agent: Could you please describe your key skills and relevant experience specific to the Generative AI Engineer role? For example, your work with AI models or APIs?
+Agent: Agent message not found
+User: I've worked in Python, built APIs, worked with OpenAI APIs to develop the language.
+Agent: That's great experience! You have worked with integrating APIs and large language models. Lastly, do you have any questions or concerns?
+User: But that was my question model done on.
+Agent: Thank you for your time. Our team will follow up with you soon. Have a great day!
+User: Don't you have more questions?

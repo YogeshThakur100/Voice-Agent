@@ -1,11 +1,15 @@
 {
-  "Total Experience": ,
-  "CTC": "",
-  "ECTC": "",
-  "Notice Period": "",
-  "City": "",
-  "Communication": "",
-  "Communication Rating": ,
-  "Experience Skillset": "",
-  "Applicant Summary": ""
-}                     
+  "total_experience": 2,
+  "ctc": "7 lakh per year",
+  "ectc": "10 lakh per year",
+  "notice_period": "15 DAYS",
+  "city": "Mumbai",
+  "communication": "GOOD",
+  "communication_rating": 7,
+  "experience_skillset": [
+    "Python",
+    "APIs",
+    "OpenAI APIs"
+  ],
+  "applicant_summary": "Mahalingam Ramasamy has two years of experience and possesses a solid foundation in Python and API development, specifically with OpenAI APIs. His current CTC is reasonable for his experience, and his expected CTC shows ambition for career growth. He has a manageable notice period of 15 days, which should not hinder his availability. Overall, he appears to be a promising candidate for the Generative AI Engineer position."
+}

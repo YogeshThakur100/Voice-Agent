@@ -65,9 +65,9 @@ session_data = {}
 async def call_voice_agent(request : Request):
     try:
         data = await request.json()
-        company = data.get('company')
+        company = data.get('company_name')
         role = data.get('role')
-        candidate = data.get('candidate')
+        candidate = data.get('candidate_name')
         local_url = os.getenv('local_url')
 
         job_summery = data.get('job_summery')
@@ -75,10 +75,10 @@ async def call_voice_agent(request : Request):
         try:
             # questions = AI_Integration.makeQuestion(job_summery)
             questions = """
-            1. Can you explain how you have implemented AJAX in your previous projects?  
-            2. Describe your experience using Node.js for developing RESTful APIs.
-            3. How do you manage state in a React.js application?
-            4. What strategies do you use for optimizing MongoDB queries?
+            1. What is your experience with integrating APIs like OpenAI and Hugging Face into applications?
+            2. Can you describe your proficiency in Python, specifically in the context of building AI-powered solutions?
+            3. How have you utilized LangChain or vector databases in your previous projects?
+            4. Have you implemented features such as summarization and question answering using large language models?
             """
         except Exception as e:
             return JSONResponse(
@@ -117,7 +117,7 @@ async def call_voice_agent(request : Request):
             status_callback=f"{local_url}/events",
             status_callback_event=["queued", "initiated", "ringing", "in-progress", "completed"],
             status_callback_method="POST",
-            url=f"{local_url}?{query_string}"
+            url=f"{local_url}/incoming-call?{query_string}"
         )
 
         print(call.sid)
@@ -445,17 +445,17 @@ async def make_chatgpt_completion(transcript: str):
                                 "type": "object",
                                 "properties": {
                                     "total_experience": {"type": "integer", "description": "total_experience in numbers given by candidate"},
-                                    "ctc": {"type": "string", "description": "candidate current cost to company"},
-                                    "ectc": {"type": "string", "description": "candidate expected cost to company"},
+                                    "ctc": {"type": "integer", "description": "candidate current cost to company in numbers like if user tell 5Lakh then convert it in to rupess 500000 which must you return"},
+                                    "ectc": {"type": "integer", "description": "candidate expected cost to company in numbers like if user tell 5Lakh then convert it in to rupess 500000 which must you return"},
                                     "notice_period": {"type": "string", "description": "[IMMEDIATE , 1 WEEK , 15 DAYS , 1 MONTH , 2 MONTHS , 3 MONTHS] give me the response from the list only based on the candidate answer"},
                                     "city": {"type": "string", "description": "current city of the employee given by candidate"},
                                     "communication": {"type": "string", "description": "[POOR , GOOD , MODERATE , EXCELLENT ] give me the communication tag based on the conversation"},
-                                    "communication_rating": {"type": "integer", "description": "based on the conversation , rate the communication skill out of 10 of the candidate"},
+                                    "communication_rating": {"type": "integer", "description": "based on the conversation , rate the communication skill out of 10 of the candidate must be integer not float"},
                                     "experience_skillset": {"type": "string", "description": "[] Provide the list of the communication_rating of technology the candidate knows like [python , react.js]"},
-                                    "applicant_summary": {"type": "string", "description": "state based on the answer given by the candiate , does it will be fit for the job or not describe this in 3-4sentences good things or bad things about the candidate"}
-                                    
+                                    "applicant_summary": {"type": "string", "description": "state based on the answer given by the candiate , does it will be fit for the job or not describe this in 3-4sentences good things or bad things about the candidate"},
+                                    "status" : {"type": "string", "description": "based on the answer provided by the candidate give the status True if selected and False if rejected"}
                                 },
-                                "required": ["total_experience", "ctc", "ectc" , "notice_period" , "city" , "communication" , "communication_rating" , "communication_rating","experience_skillset" , "applicant_summary"]
+                                "required": ["total_experience", "ctc", "ectc" , "notice_period" , "city" , "communication"  , "communication_rating","experience_skillset" , "applicant_summary"]
                             }
                         }
                     }
@@ -469,7 +469,7 @@ async def make_chatgpt_completion(transcript: str):
         logger.error(f'Error making Recruiting completion call: {e}')
         raise e
 
-# Function to send data to Make.com webhook
+# Function to send data to api
 async def send_to_webhook(payload: dict):
     logger.info(f'Sending data to webhook: {json.dumps(payload, indent=2)}')
     try:
@@ -515,13 +515,12 @@ async def process_transcript_and_send(transcript: str, session_id: Optional[str]
                 # Create a fallback structure with the raw content
                 fallback_data = {
                     "total_experience": 0,
-                    "ctc": "Unknown", 
-                    "ectc": "Unknown",
+                    "ctc": 0, 
+                    "ectc": 0,
                     "notice_period": "Unknown",
                     "city": "Unknown",
                     "communication": "Unknown",
                     "communication_rating" : 0,
-                    "communication_rating" : "Unknown",
                     "experience_skillset" : [],
                     "applicant_summary" : "Unknown"
                 }
