@@ -430,7 +430,7 @@ async def make_chatgpt_completion(transcript: str):
                     "messages": [
                         {
                             "role": "system",
-                            "content": "You are a recruiting assistant. Extract candidate information from the conversation transcript and return it as a JSON object with the following structure: {\"total_experience\": \"integer\", \"ctc\": \"integer\", \"ectc\": \"integer\", \"notice_period\": \"string\", \"city\": \"string\", \"communication\": \"string\", \"communication_rating\": \"integer\" , \"communication_rating\": \"List\" , \"Applicant Summary\": \"string\"}. Only return the JSON object, no additional text."
+                            "content": "You are a recruiting assistant. Extract candidate information from the conversation transcript and return it as a JSON object with the following structure: {\"total_experience\": \"integer\", \"ctc\": \"integer\", \"ectc\": \"integer\", \"notice_period\": \"string\", \"city\": \"string\", \"communication\": \"string\", \"communication_rating\": \"integer\" , \"experience_skillset\": \"List\" , \"Applicant Summary\": \"string\"}. Only return the JSON object, no additional text."
                         },
                         {
                             "role": "user",
