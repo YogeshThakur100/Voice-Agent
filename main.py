@@ -65,11 +65,11 @@ session_data = {}
 async def call_voice_agent(request : Request):
     try:
         data = await request.json()
-        company = data.get('company_name')
+        company = data.get('company')
         role = data.get('role')
-        candidate = data.get('candidate_name')
+        candidate = data.get('candidate')
         local_url = os.getenv('local_url')
-
+        encrypted_data = data.get('encrypted_data')
         job_summery = data.get('job_summery')
 
         try:
@@ -99,7 +99,8 @@ async def call_voice_agent(request : Request):
             "company": company,
             "candidate": candidate,
             "questions": questions,
-            "role" : role
+            "role" : role,
+            "encrypted_data" : encrypted_data
         }
 
         print('params ---->' , params)
@@ -114,7 +115,7 @@ async def call_voice_agent(request : Request):
         call = client.calls.create(
             from_='+15513483782',
             to=data.get('candidate_phone_number'),
-            status_callback=f"{local_url}/events",
+            status_callback=f"{local_url}/events?encrypted_data={encrypted_data}",
             status_callback_event=["queued", "initiated", "ringing", "in-progress", "completed"],
             status_callback_method="POST",
             url=f"{local_url}/incoming-call?{query_string}"
@@ -143,25 +144,45 @@ async def call_voice_agent(request : Request):
 async def call_status(request: Request):
     form_data = await request.form()
     print("Form Data -----> : " , form_data)
+    encrypted_data = request.query_params.get('encrypted_data')
     
-    call_sid = form_data.get("CallSid")
-    call_status = form_data.get("CallStatus")
-    call_duration = form_data.get("CallDuration")  # Only present on 'completed'
+    try:
+        call_sid = form_data.get("CallSid")
+        call_status = form_data.get("CallStatus")
+        call_duration = form_data.get("CallDuration")  # Only present on 'completed'
 
-    print("📞 Call SID:", call_sid)
-    print("📊 Status:", call_status)
-    print("⏱ Duration:", call_duration)
+        print("📞 Call SID:", call_sid)
+        print("📊 Status:", call_status)
+        print("⏱ Duration:", call_duration)
 
-    if call_status == "no-answer":
-        print("❌ Call not picked")
-    elif call_status == "canceled":
-        print("🚫 Call canceled before ringing")
-    elif call_status == "busy":
-        print("📞 Line was busy")
-    elif call_status == "completed":
-        print(f"✅ Call completed. Duration: {call_duration} seconds")
+        response = ""
 
-    return PlainTextResponse("OK", status_code=200)
+        if call_status == "no-answer":
+            response = "no-answer"
+        elif call_status == "canceled":
+            response = "canceled"
+        elif call_status == "busy":
+            response = "busy"
+
+        return JSONResponse(
+            status_code=200,
+            content={
+                "success" : True,
+                "message"  : response,
+                "data" : {}
+            }
+        )
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={
+                "success" : False,
+                "message" : str(e),
+                "data" : {}
+            }
+
+        )
 
 
 # Root Route
@@ -185,6 +206,7 @@ async def incoming_call(request: Request):
             <Parameter name="company" value="{data.get('company')}"/>
             <Parameter name="role" value="{data.get('role')}"/>
             <Parameter name="candidate" value="{data.get('candidate')}"/>
+            <Parameter name="encrypted_data" value="{data.get('encrypted_data')}"/>
             <Parameter name="questions" value="{','.join(data.get('questions', []))}"/>
             </Stream>
         </Connect>
@@ -199,7 +221,7 @@ async def media_stream_websocket(websocket: WebSocket):
     logger.info('Client connected')
 
     session_id = websocket.headers.get('x-twilio-call-sid', f'session_{int(time.time() * 1000)}')
-    session = sessions.get(session_id, {'transcript': '', 'stream_sid': None})
+    session = sessions.get(session_id, {'transcript': '', 'stream_sid': None ,  'encrypted_data' : ''})
     sessions[session_id] = session
 
     # Connect to OpenAI WebSocket
@@ -327,7 +349,11 @@ async def media_stream_websocket(websocket: WebSocket):
                         company = params.get("company", "")
                         role = params.get("role", "")
                         candidate = params.get("candidate", "")
+                        encrypted_data = params.get("encrypted_data", "")
                         questions = params.get("questions", "").split(",")
+
+                        session['encrypted_data'] = encrypted_data
+                        logger.info("Session updated with encrypted_data " , session)
 
                         SYSTEM_MESSAGE = f"""
                         You are company automated recruitment voice assistant. Your job is to conduct screening interviews with candidates.
@@ -409,7 +435,7 @@ async def media_stream_websocket(websocket: WebSocket):
         logger.info('Full Transcript:')
         logger.info(session['transcript'])
 
-        await process_transcript_and_send(session['transcript'], session_id)
+        await process_transcript_and_send(session['transcript'], session['encrypted_data'] ,session_id)
 
         # Clean up the session
         sessions.pop(session_id, None)
@@ -470,17 +496,18 @@ async def make_chatgpt_completion(transcript: str):
         raise e
 
 # Function to send data to api
-async def send_to_webhook(payload: dict):
+async def send_to_webhook(payload: dict , encrypted_data):
     logger.info(f'Sending data to webhook: {json.dumps(payload, indent=2)}')
     try:
         with open('candidate_summery.txt', 'w', encoding="utf-8") as f:
             f.write(json.dumps(payload, indent=2))  # ✅ convert dict to str
+        logger.info("Encrypted data added in the response" , encrypted_data)
         logger.info("candidate_summery.txt created and populated successfully.")
     except Exception as e:
         logger.error(f'Error sending data to webhook: {e}')
 
 # Main function to extract and send customer details
-async def process_transcript_and_send(transcript: str, session_id: Optional[str] = None):
+async def process_transcript_and_send(transcript: str,encrypted_data,session_id: Optional[str] = None ):
     logger.info(f'Starting transcript processing for session {session_id}...')
     try:
         # Make the ChatGPT completion call
@@ -503,7 +530,7 @@ async def process_transcript_and_send(transcript: str, session_id: Optional[str]
 
                 if parsed_content:
                     # Send the parsed content directly to the webhook
-                    await send_to_webhook(parsed_content)
+                    await send_to_webhook(parsed_content , encrypted_data)
                     logger.info(f'Extracted and sent customer details: {parsed_content}')
                 else:
                     logger.error('Unexpected JSON structure in ChatGPT response')
