@@ -113,7 +113,7 @@ async def call_voice_agent(request : Request):
         client = Client(account_sid , account_auth)
 
         call = client.calls.create(
-            from_='+15513483782',
+            from_='+12298059032',
             to=data.get('candidate_phone_number'),
             status_callback=f"{local_url}/events?encrypted_data={encrypted_data}",
             status_callback_event=["queued", "initiated", "ringing", "in-progress", "completed"],
@@ -251,7 +251,11 @@ async def media_stream_websocket(websocket: WebSocket):
             session_update = {
                 "type": "session.update",
                 "session": {
-                    "turn_detection": {"type": "server_vad"},
+                    "turn_detection": {
+                        "type": "server_vad",
+                        "threshold" : 0.75,
+                        "silence_duration_ms" : 1200,
+                        },
                     "input_audio_format": "g711_ulaw",
                     "output_audio_format": "g711_ulaw",
                     "voice": VOICE,
@@ -259,7 +263,8 @@ async def media_stream_websocket(websocket: WebSocket):
                     "modalities": ["text", "audio"],
                     "temperature": 0.8,
                     "input_audio_transcription": {
-                        "model": "whisper-1"
+                        "model": "whisper-1",
+                        "language": "en",
                     }
                 }
             }
@@ -481,7 +486,7 @@ async def make_chatgpt_completion(transcript: str):
                                     "applicant_summary": {"type": "string", "description": "state based on the answer given by the candiate , does it will be fit for the job or not describe this in 3-4sentences good things or bad things about the candidate"},
                                     "status" : {"type": "string", "description": "based on the answer provided by the candidate give the status True if selected and False if rejected"}
                                 },
-                                "required": ["total_experience", "ctc", "ectc" , "notice_period" , "city" , "communication"  , "communication_rating","experience_skillset" , "applicant_summary"]
+                                "required": ["total_experience", "ctc", "ectc" , "notice_period" , "city" , "communication"  , "communication_rating","experience_skillset" , "applicant_summary","status"]
                             }
                         }
                     }
@@ -549,7 +554,8 @@ async def process_transcript_and_send(transcript: str,encrypted_data,session_id:
                     "communication": "Unknown",
                     "communication_rating" : 0,
                     "experience_skillset" : [],
-                    "applicant_summary" : "Unknown"
+                    "applicant_summary" : "Unknown",
+                    "status" : "Unknown"
                 }
                 
                 logger.info(f'Sending fallback data: {fallback_data}')
