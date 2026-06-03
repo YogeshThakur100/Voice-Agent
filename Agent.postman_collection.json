@@ -1,0 +1,128 @@
+{
+  "info": {
+    "_postman_id": "35944786-4c23-47c7-8b4d-09e2c20d5da3",
+    "name": "Agent",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40514136"
+  },
+  "item": [
+    {
+      "name": "Agent_chatbot",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5b2dlc2h0aGFrdXIzMTAwQGdtYWlsLmNvbSIsInJvbGUiOiJST0xFX0FETUlOIiwiZXhwIjoxODA4NjU1MTU3fQ.Zagi2aRtZlkJktvVRpJ03rGvq47IoOfd5Bnx0ijdFEw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"message\" : \"Hiii\",\r\n    \"user_email\" : \"yogeshthakur3100@gmail.com\"\r\n    // \"sprintboot_token\" : \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://0.0.0.0:8000/api/aichatbot-agent",
+          "protocol": "http",
+          "host": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "port": "8000",
+          "path": [
+            "api",
+            "aichatbot-agent"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://127.0.0.1:8000/certificates/marriage_barcode/1?district_id=1&taluka_id=1&gram_panchayat_id=1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/certificates/marriage_barcode/1?district_id=1&taluka_id=1&gram_panchayat_id=1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "certificates",
+            "marriage_barcode",
+            "1"
+          ],
+          "query": [
+            {
+              "key": "district_id",
+              "value": "1"
+            },
+            {
+              "key": "taluka_id",
+              "value": "1"
+            },
+            {
+              "key": "gram_panchayat_id",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://127.0.0.1:8000/certificates/marriage_barcode/1?district_id=1&taluka_id=1&gram_panchayat_id=1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/certificates/marriage_barcode/1?district_id=1&taluka_id=1&gram_panchayat_id=1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "certificates",
+            "marriage_barcode",
+            "1"
+          ],
+          "query": [
+            {
+              "key": "district_id",
+              "value": "1"
+            },
+            {
+              "key": "taluka_id",
+              "value": "1"
+            },
+            {
+              "key": "gram_panchayat_id",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
