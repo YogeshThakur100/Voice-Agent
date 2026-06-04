@@ -1,0 +1,49 @@
+{
+  "info": {
+    "_postman_id": "17cc3b73-705d-4824-a13c-efa650a0ff4b",
+    "name": "Voice Agent",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40514136"
+  },
+  "item": [
+    {
+      "name": "calling an agent",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"company\" : \"Gunadhya Software Solution Private Limited\",\r\n    \"role\" : \"Generative AI Engineer\",\r\n    \"candidate\" : \"Amol Amalapure\",\r\n    \"job_summery\" : \"The Generative AI Developer is responsible for building and integrating AI-powered solutions using large language models and modern AI frameworks. Key responsibilities include developing GenAI features such as summarization and question answering, working with tools like LangChain, vector databases, and RAG pipelines, and integrating APIs like OpenAI and Hugging Face. The developer will collaborate with cross-functional teams to embed AI into web/mobile applications, prototype solutions, and ensure ethical and secure AI usage. Desired skills include proficiency in Python, prompt engineering, FastAPI or Flask, and familiarity with cloud platforms (AWS/GCP). Candidates should have 1–3 years of experience in AI/ML or backend development, and hold a degree in MCA, BTech, BCA, B.Sc, M.Sc, or MTech. Experience with LLM APIs, embeddings, chatbot development, and tools like Streamlit or LangChain is required.\",\r\n    \"candidate_phone_number\" : \"+919130081345   \",\r\n    \"encrypted_data\" : \"eyJpZCI6Ik1nIiwiam9iX2lkIjoiMTc1IiwiYXBwbGljYW50X2lkIjoiMjU2MjgiLCJwcm9jZXNzX2lkIjoiNTgxIn0\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/call-voice-agent",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "call-voice-agent"
+          ],
+          "query": [
+            {
+              "key": "company",
+              "value": "",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
